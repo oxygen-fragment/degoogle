@@ -4,6 +4,31 @@ search Google and extract result urls directly. skip all the click-through links
 contributions welcome
 
 ---
+## modern TypeScript/Node CLI (preview)
+
+This repo now includes a modern Node CLI (`degoogle-ts`) in `src/` while keeping the original Python package.
+
+### quick start
+```bash
+npm install
+npm run build
+```
+
+Run:
+```bash
+npm run degoogle -- "site:edu filetype:txt" -p 2 -t m3
+```
+
+Output modes:
+```bash
+# JSON
+npm run degoogle -- "query" --json
+
+# Simple web output
+npm run degoogle -- "query" --web --out degoogle-results.html
+```
+
+---
 install with pip:
 `pip install degoogle`
 
