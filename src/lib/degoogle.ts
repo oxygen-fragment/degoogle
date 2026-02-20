@@ -52,35 +52,58 @@ function isJunkUrl(url: string): boolean {
   return JUNK_PATTERNS.some((pattern) => url.includes(pattern));
 }
 
-function extractEntry(entry: string, excludeJunk: boolean): SearchResult | null {
-  const split = entry.split('<a href="/url?q=');
-  if (split.length < 2) {
+function extractRawUrl(entry: string): string | null {
+  const urlPrefix = '<a href="/url?q=';
+  const prefixIndex = entry.indexOf(urlPrefix);
+  if (prefixIndex === -1) {
     return null;
   }
 
-  const linkPart = split[1];
-  const ampIndex = linkPart.search(/&amp;(sa|usg|ved)=/);
-  if (ampIndex === -1) {
-    return null;
-  }
-  const rawUrl = linkPart.slice(0, ampIndex);
-  if (!rawUrl.startsWith("http")) {
-    return null;
-  }
-  if (excludeJunk && isJunkUrl(rawUrl)) {
+  const start = prefixIndex + urlPrefix.length;
+  const tail = entry.slice(start);
+  const end = tail.search(/&amp;(sa|usg|ved)=/);
+  if (end === -1) {
     return null;
   }
 
+  const url = tail.slice(0, end);
+  return url.startsWith("http") ? url : null;
+}
+
+function extractRawDesc(entry: string): string | null {
   const descSplit = entry.split(/<[spandiv]{3,4} class=".+?(?=">)">|<\/[spandiv]{3,4}>/);
   const rawDesc = descSplit.find((segment) => segment && !segment.startsWith("<"))?.trim();
-  if (!rawDesc) {
-    return null;
-  }
+  return rawDesc ?? null;
+}
 
+function shouldSkipUrl(url: string, excludeJunk: boolean): boolean {
+  if (!url) {
+    return true;
+  }
+  if (!excludeJunk) {
+    return false;
+  }
+  return isJunkUrl(url);
+}
+
+function toSearchResult(rawUrl: string, rawDesc: string): SearchResult {
   return {
     desc: normalizeDesc(rawDesc),
     url: normalizeUrl(rawUrl)
   };
+}
+
+function extractEntry(entry: string, excludeJunk: boolean): SearchResult | null {
+  const rawUrl = extractRawUrl(entry);
+  if (!rawUrl || shouldSkipUrl(rawUrl, excludeJunk)) {
+    return null;
+  }
+  const rawDesc = extractRawDesc(entry);
+  if (!rawDesc) {
+    return null;
+  }
+
+  return toSearchResult(rawUrl, rawDesc);
 }
 
 function extractPageEntries(html: string): string[] {
