@@ -16,7 +16,7 @@ Options:
   -o, --offset <n>        page offset (default: 0)
   -p, --pages <n>         number of pages to fetch (default: 1)
   -t, --time-window <qdr> Google qdr window: a,d,h,m,n,w,y + optional number (default: a)
-  -j, --include-junk      include junk domains (default: filtered out)
+  -j, --include-junk      include junk domains (default filters: youtube.com, youtu.be, quora.com, facebook.com, pinterest.com)
   --json                  print JSON output
   --web                   generate simple HTML output
   --out <file>            output file for --web or --json (default: degoogle-results.html / degoogle-results.json)
