@@ -4,9 +4,21 @@ search Google and extract result urls directly. skip all the click-through links
 contributions welcome
 
 ---
+## Fork and Attribution
+
+This repository is a modernization **fork** of the original `degoogle` project by `deepseagirl`.
+
+- Upstream: https://github.com/deepseagirl/degoogle
+- Fork provenance and policy: see `FORK.md`
+
+To avoid confusion with upstream ownership:
+- npm package identity for the modern CLI is distinct (`degoogle-modern-cli`)
+- CLI binary name for the modern path is distinct (`degoogle-modern`)
+
+---
 ## modern TypeScript/Node CLI (preview)
 
-This repo now includes a modern Node CLI (`degoogle-ts`) in `src/` while keeping the original Python package.
+This repo now includes a modern Node CLI (`degoogle-modern`) in `src/` while keeping the original Python package.
 
 ### quick start
 ```bash
@@ -17,6 +29,8 @@ npm run build
 Run:
 ```bash
 npm run degoogle -- "site:edu filetype:txt" -p 2 -t m3
+# or after global npm install/publish
+degoogle-modern "site:edu filetype:txt" -p 2 -t m3
 ```
 
 Output modes:

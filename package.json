@@ -1,17 +1,27 @@
 {
-  "name": "degoogle",
+  "name": "degoogle-modern-cli",
   "version": "2.0.0-alpha.1",
-  "description": "Modern TypeScript CLI for extracting direct Google result URLs",
+  "description": "Forked modernization of degoogle: TypeScript CLI for extracting direct Google result URLs",
+  "author": "Fork maintainer(s)",
   "license": "MIT",
   "type": "commonjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/<your-account>/degoogle"
+  },
+  "homepage": "https://github.com/<your-account>/degoogle#readme",
+  "bugs": {
+    "url": "https://github.com/<your-account>/degoogle/issues"
+  },
   "bin": {
-    "degoogle-ts": "dist/cli.js"
+    "degoogle-modern": "dist/cli.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "degoogle": "node dist/cli.js",
-    "test:precode": "node --test tests/precode/*.test.mjs"
+    "test:precode": "node --test tests/precode/*.test.mjs",
+    "prepublishOnly": "npm run build && npm run typecheck"
   },
   "engines": {
     "node": ">=18.17"

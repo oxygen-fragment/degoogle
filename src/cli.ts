@@ -6,12 +6,12 @@ import { writeWebReport } from "./lib/web";
 import type { CliOptions } from "./types";
 
 function printHelp(): void {
-  console.log(`degoogle-ts - modern TypeScript CLI
+  console.log(`degoogle-modern - modern TypeScript CLI
 
 Usage:
-  degoogle-ts "query"
-  degoogle-ts "query" -p 3 -t m3 --json
-  degoogle-ts "query" --web --out degoogle-results.html
+  degoogle-modern "query"
+  degoogle-modern "query" -p 3 -t m3 --json
+  degoogle-modern "query" --web --out degoogle-results.html
 
 Options:
   -o, --offset <n>        page offset (default: 0)
