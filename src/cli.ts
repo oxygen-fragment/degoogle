@@ -23,9 +23,9 @@ Options:
   -h, --help              show help`);
 }
 
-function parseIntSafe(value: string, flag: string): number {
+function parseIntSafe(value: string, flag: string, min: number): number {
   const parsed = Number.parseInt(value, 10);
-  if (!Number.isFinite(parsed) || parsed < 0) {
+  if (!Number.isFinite(parsed) || parsed < min) {
     throw new Error(`Invalid value for ${flag}: ${value}`);
   }
   return parsed;
@@ -54,13 +54,13 @@ function parseArgs(argv: string[]): CliOptions {
       case "--offset":
         i += 1;
         if (!argv[i]) throw new Error(`Missing value for ${a}`);
-        opts.offset = parseIntSafe(argv[i], a);
+        opts.offset = parseIntSafe(argv[i], a, 0);
         break;
       case "-p":
       case "--pages":
         i += 1;
         if (!argv[i]) throw new Error(`Missing value for ${a}`);
-        opts.pages = parseIntSafe(argv[i], a);
+        opts.pages = parseIntSafe(argv[i], a, 1);
         break;
       case "-t":
       case "--time-window":
@@ -97,6 +97,12 @@ function parseArgs(argv: string[]): CliOptions {
 
   if (!opts.query.trim()) {
     throw new Error("Query is required.");
+  }
+  if (opts.outputJson && opts.outputWeb) {
+    throw new Error("Choose only one output mode: --json or --web.");
+  }
+  if (opts.outFile && !opts.outputJson && !opts.outputWeb) {
+    throw new Error("--out is only valid with --json or --web.");
   }
   return opts;
 }
