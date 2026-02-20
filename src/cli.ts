@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { writeFile } from "node:fs/promises";
 import { runSearch } from "./lib/degoogle";
+import { formatTextOutput } from "./lib/output";
 import { writeWebReport } from "./lib/web";
 import type { CliOptions } from "./types";
 
@@ -107,18 +108,6 @@ function parseArgs(argv: string[]): CliOptions {
   return opts;
 }
 
-function toTextOutput(results: Array<{ desc: string; url: string }>): string {
-  if (results.length === 0) {
-    return "no results";
-  }
-
-  let out = `-- ${results.length} results --\n\n`;
-  for (const r of results) {
-    out += `${r.desc}\n${r.url}\n\n`;
-  }
-  return out.trimEnd();
-}
-
 async function main(): Promise<void> {
   try {
     const args = parseArgs(process.argv.slice(2));
@@ -147,7 +136,7 @@ async function main(): Promise<void> {
       return;
     }
 
-    console.log(toTextOutput(results));
+    console.log(formatTextOutput(args.query, results));
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error(`error: ${message}`);
