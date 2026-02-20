@@ -22,6 +22,7 @@ dist/
 .eggs/
 pip-wheel-metadata/
 wheels/
+node_modules/
 
 # ------------------------------------------------------------------------------
 # Virtual environments
