@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { writeFile } from "node:fs/promises";
 import { runSearch } from "./lib/degoogle";
-import { formatTextOutput } from "./lib/output";
+import { formatJsonOutput, formatTextOutput } from "./lib/output";
 import { writeWebReport } from "./lib/web";
 import type { CliOptions } from "./types";
 
@@ -126,7 +126,7 @@ async function main(): Promise<void> {
     }
 
     if (args.outputJson) {
-      const json = JSON.stringify(results, null, 2);
+      const json = formatJsonOutput(args.query, results);
       if (args.outFile) {
         await writeFile(args.outFile, json, "utf8");
         console.log(`wrote json: ${args.outFile}`);

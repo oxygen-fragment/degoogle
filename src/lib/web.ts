@@ -10,11 +10,7 @@ function escapeHtml(value: string): string {
     .replace(/'/g, "&#39;");
 }
 
-export async function writeWebReport(
-  outFile: string,
-  query: string,
-  results: SearchResult[]
-): Promise<void> {
+export function buildWebHtml(query: string, results: SearchResult[]): string {
   const rows = results
     .map((r, i) => {
       const safeDesc = escapeHtml(r.desc);
@@ -23,7 +19,7 @@ export async function writeWebReport(
     })
     .join("\n");
 
-  const html = `<!doctype html>
+  return `<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -56,6 +52,12 @@ export async function writeWebReport(
   </main>
 </body>
 </html>`;
+}
 
-  await writeFile(outFile, html, "utf8");
+export async function writeWebReport(
+  outFile: string,
+  query: string,
+  results: SearchResult[]
+): Promise<void> {
+  await writeFile(outFile, buildWebHtml(query, results), "utf8");
 }

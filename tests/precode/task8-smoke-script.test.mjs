@@ -1,8 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 
-test("Task 8 precode: project should expose a dedicated smoke-test npm script", () => {
-  // TODO(Task 8): replace this placeholder with a real assertion that package.json
-  // includes and runs a smoke script covering build + core CLI checks.
-  assert.fail("Precode anchor: Task 8 not implemented yet.");
+test("Task 8 precode: package.json should expose a smoke npm script", () => {
+  const pkg = JSON.parse(readFileSync(resolve("package.json"), "utf8"));
+  assert.ok("smoke" in pkg.scripts, 'package.json scripts should include "smoke"');
+  assert.ok(pkg.scripts.smoke.includes("build"), "smoke script should reference build");
+  assert.ok(pkg.scripts.smoke.includes("typecheck"), "smoke script should reference typecheck");
 });

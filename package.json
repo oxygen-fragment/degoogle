@@ -21,6 +21,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "degoogle": "node dist/cli.js",
     "test:precode": "node --test tests/precode/*.test.mjs",
+    "smoke": "npm run build && npm run typecheck && node dist/cli.js --help",
     "prepublishOnly": "npm run build && npm run typecheck"
   },
   "engines": {

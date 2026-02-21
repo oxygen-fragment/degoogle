@@ -1,5 +1,9 @@
 import type { SearchResult } from "../types";
 
+export function formatJsonOutput(query: string, results: SearchResult[]): string {
+  return JSON.stringify({ query, count: results.length, results }, null, 2);
+}
+
 export function formatTextOutput(query: string, results: SearchResult[]): string {
   const header = `Query: ${query}\nResults: ${results.length}`;
 

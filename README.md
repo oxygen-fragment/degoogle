@@ -16,31 +16,36 @@ To avoid confusion with upstream ownership:
 - CLI binary name for the modern path is distinct (`degoogle-modern`)
 
 ---
-## modern TypeScript/Node CLI (preview)
+## Node/TypeScript CLI
 
-This repo now includes a modern Node CLI (`degoogle-modern`) in `src/` while keeping the original Python package.
+Modern TypeScript rewrite of degoogle. The original Python package is preserved alongside it.
 
-### quick start
+### Quick Start
 ```bash
 npm install
-npm run build
+npm run build          # compile TypeScript → dist/
+npm run smoke          # verify: build + typecheck + --help
 ```
 
-Run:
+### Usage
 ```bash
-npm run degoogle -- "site:edu filetype:txt" -p 2 -t m3
-# or after global npm install/publish
-degoogle-modern "site:edu filetype:txt" -p 2 -t m3
+# text output (default)
+node dist/cli.js "site:edu filetype:txt" -p 2 -t m3
+
+# JSON to stdout
+node dist/cli.js "query" --json
+
+# JSON to file
+node dist/cli.js "query" --json --out results.json
+
+# HTML report
+node dist/cli.js "query" --web --out results.html
+
+# all options
+node dist/cli.js --help
 ```
 
-Output modes:
-```bash
-# JSON
-npm run degoogle -- "query" --json
-
-# Simple web output
-npm run degoogle -- "query" --web --out degoogle-results.html
-```
+Key options: `-o` page offset · `-p` pages · `-t` time window (`m3`, `d7`, `y1` …) · `-j` include junk domains · `--json` · `--web` · `--out <file>`
 
 ---
 install with pip:
