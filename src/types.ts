@@ -3,6 +3,8 @@ export interface SearchOptions {
   pages: number;
   timeWindow: string;
   excludeJunk: boolean;
+  apiKey: string;
+  cx: string;
 }
 
 export interface SearchResult {

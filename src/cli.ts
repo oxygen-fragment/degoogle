@@ -13,10 +13,14 @@ Usage:
   degoogle-modern "query" -p 3 -t m3 --json
   degoogle-modern "query" --web --out degoogle-results.html
 
+Credentials (required — flag or env var):
+  --api-key <key>         Google Custom Search API key (or GOOGLE_API_KEY env var)
+  --cx <id>               Custom Search Engine ID (or GOOGLE_CX env var)
+
 Options:
   -o, --offset <n>        page offset (default: 0)
   -p, --pages <n>         number of pages to fetch (default: 1)
-  -t, --time-window <qdr> Google qdr window: a,d,h,m,n,w,y + optional number (default: a)
+  -t, --time-window <w>   time window: a (all), d7, w2, m3, y1, … (default: a)
   -j, --include-junk      include junk domains (default filters: youtube.com, youtu.be, quora.com, facebook.com, pinterest.com)
   --json                  print JSON output
   --web                   generate simple HTML output
@@ -39,6 +43,8 @@ function parseArgs(argv: string[]): CliOptions {
     pages: 1,
     timeWindow: "a",
     excludeJunk: true,
+    apiKey: "",
+    cx: "",
     outputJson: false,
     outputWeb: false,
     outFile: ""
@@ -68,6 +74,16 @@ function parseArgs(argv: string[]): CliOptions {
         i += 1;
         if (!argv[i]) throw new Error(`Missing value for ${a}`);
         opts.timeWindow = argv[i];
+        break;
+      case "--api-key":
+        i += 1;
+        if (!argv[i]) throw new Error("Missing value for --api-key");
+        opts.apiKey = argv[i];
+        break;
+      case "--cx":
+        i += 1;
+        if (!argv[i]) throw new Error("Missing value for --cx");
+        opts.cx = argv[i];
         break;
       case "-j":
       case "--include-junk":
@@ -99,6 +115,20 @@ function parseArgs(argv: string[]): CliOptions {
   if (!opts.query.trim()) {
     throw new Error("Query is required.");
   }
+
+  // Resolve credentials from env vars if not supplied via flags
+  if (!opts.apiKey) opts.apiKey = process.env.GOOGLE_API_KEY ?? "";
+  if (!opts.cx) opts.cx = process.env.GOOGLE_CX ?? "";
+
+  if (!opts.apiKey || !opts.cx) {
+    throw new Error(
+      "Google API credentials required.\n" +
+        "Set GOOGLE_API_KEY and GOOGLE_CX as environment variables, or pass --api-key and --cx.\n" +
+        "Get a free key at: https://developers.google.com/custom-search/v1/introduction\n" +
+        "Create a Custom Search Engine at: https://programmablesearchengine.google.com/"
+    );
+  }
+
   if (opts.outputJson && opts.outputWeb) {
     throw new Error("Choose only one output mode: --json or --web.");
   }
@@ -115,7 +145,9 @@ async function main(): Promise<void> {
       offset: args.offset,
       pages: args.pages,
       timeWindow: args.timeWindow,
-      excludeJunk: args.excludeJunk
+      excludeJunk: args.excludeJunk,
+      apiKey: args.apiKey,
+      cx: args.cx
     });
 
     if (args.outputWeb) {
