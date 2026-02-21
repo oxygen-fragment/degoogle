@@ -23,6 +23,24 @@ interface ApiResponse {
   error?: { code: number; message: string };
 }
 
+function buildApiErrorMessage(status: number, apiMessage?: string): string {
+  if (status === 403) {
+    return (
+      "Google Custom Search API request was rejected (403).\n" +
+      "Check --api-key/GOOGLE_API_KEY and verify quota/billing in Google Cloud Console."
+    );
+  }
+
+  if (status === 400) {
+    return (
+      "Google Custom Search API request failed (400).\n" +
+      "Check --cx/GOOGLE_CX and confirm your Custom Search Engine ID is valid."
+    );
+  }
+
+  return apiMessage ?? `API request failed: HTTP ${status}`;
+}
+
 function mapTimeWindowToDateRestrict(timeWindow: string): string | null {
   // "a" means all-time, so dateRestrict should be omitted.
   if (!timeWindow || timeWindow === "a") {
@@ -70,7 +88,7 @@ async function fetchPage(
 
   if (!res.ok) {
     const body = (await res.json().catch(() => ({}))) as ApiResponse;
-    throw new Error(body.error?.message ?? `API request failed: HTTP ${res.status}`);
+    throw new Error(buildApiErrorMessage(res.status, body.error?.message));
   }
 
   const data = (await res.json()) as ApiResponse;

@@ -20,6 +20,38 @@ To avoid confusion with upstream ownership:
 
 Modern TypeScript rewrite of degoogle. The original Python package is preserved alongside it.
 
+### Purpose and Scope
+This project is an opinionated CLI workflow around Google Custom Search, not a replacement search engine.
+
+Use this when you want:
+- repeatable, scriptable query runs from terminal/CI
+- direct-link extraction with simple post-processing (junk filtering, paging, time windows)
+- stable output formats (`text`, `json`, `web`) for downstream tooling
+
+Skip this when:
+- you only need occasional one-off manual searches
+- direct API calls already fit your workflow
+
+### Setup
+1. Create a Google Cloud project and enable the **Custom Search JSON API**.
+2. Create an API key in Google Cloud and keep it private.
+3. Create a Programmable Search Engine at https://programmablesearchengine.google.com/.
+4. In the search engine settings, enable searching the **entire web** (not only specific sites).
+5. Copy your Search Engine ID (CX) from the control panel.
+6. Export credentials:
+
+```bash
+export GOOGLE_API_KEY="your_api_key"
+export GOOGLE_CX="your_search_engine_id"
+```
+
+PowerShell:
+
+```powershell
+$env:GOOGLE_API_KEY="your_api_key"
+$env:GOOGLE_CX="your_search_engine_id"
+```
+
 ### Quick Start
 ```bash
 npm install
